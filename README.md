@@ -19,8 +19,7 @@ When the Spell is "Cure Wounds" and the User DOES NOT HAVE "Somatic Component" t
 
 
 
-### Extra points
-For Extra Points, I would like to be able to 
+### Optional Extras (NOT REQUIRED)
 1. Load all users into the application - Via a JSON File
 2. Select a User to Check the Spell for
 3. Use a Logger (Serilog) to write the messages rather than a Console.WriteLine statement.
