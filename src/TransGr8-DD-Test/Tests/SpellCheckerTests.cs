@@ -162,6 +162,28 @@ namespace TransGr8_DD_Test.Tests
 
 			// Assert
 			Assert.False(result);
-		}
-	}
+        }
+
+        [Test]
+        [TestCase("Cure Wounds", ExpectedResult = false)]
+        [TestCase("Identify", ExpectedResult = false)]
+        public bool TestCanUserCastSpellReturnsFalseForMissingConcentration(string spellName)
+        {
+            // Arrange
+            SpellChecker spellChecker = new SpellChecker(spells); 
+			
+			user = new User
+            {
+                Level = 1,
+                HasVerbalComponent = false,
+                HasSomaticComponent = false,
+                HasMaterialComponent = false,
+                Range = 1,
+                HasConcentration = false
+            };
+
+            // Act
+            return spellChecker.CanUserCastSpell(user, spellName);
+        }
+    }
 }
