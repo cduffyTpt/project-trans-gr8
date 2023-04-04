@@ -12,11 +12,7 @@
 		public bool CanUserCastSpell(User user, string spellName)
 		{
 			Spell spell = _spellList.Find(s => s.Name == spellName);
-			if (spell == null)
-			{
-				// The specified spell was not found in the spell list.
-				return false;
-			}
+			
 			if (user.Level < spell.Level)
 			{
 				return false;
