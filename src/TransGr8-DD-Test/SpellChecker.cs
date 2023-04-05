@@ -13,7 +13,7 @@
 		{
 			Spell spell = _spellList.Find(s => s.Name == spellName);
 			
-			// No need to specify spells in my tests , if i doesn't exist it will return false
+			// No need to specify spells in my tests , if it doesn't exist it will return false
 			if(spell == null)
 			{
 				return false;
@@ -61,14 +61,7 @@
 					return false;
 				}
 			}
-            if (user.Level < spell.Level)
-            {
-                return false;
-            }
-            if (!user.HasConcentration)
-            {
-                return false;
-            }
+
             // Add additional checks as needed for specific saving throws or other requirements.
             return true;
 		}
