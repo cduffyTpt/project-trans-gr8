@@ -13,6 +13,10 @@
 		{
 			Spell spell = _spellList.Find(s => s.Name == spellName);
 			
+			if(spell == null)
+			{
+				return false;
+			}
 			if (user.Level < spell.Level)
 			{
 				return false;
@@ -24,14 +28,14 @@
 					return false;
 				}
 			}
-			else if (spell.Components.Contains("S"))
+			if (spell.Components.Contains("S"))
 			{
 				if (!user.HasSomaticComponent)
 				{
 					return false;
 				}
 			}
-			else if (spell.Components.Contains("M"))
+			if (spell.Components.Contains("M"))
 			{
 				if (!user.HasMaterialComponent)
 				{
@@ -49,8 +53,23 @@
 					return false;
 				}
 			}
-			// Add additional checks as needed for specific saving throws or other requirements.
-			return true;
+			if (spell.Name.Equals("Cure Wounds"))
+			{
+				if (!user.HasSomaticComponent)
+				{
+					return false;
+				}
+			}
+            if (user.Level < spell.Level)
+            {
+                return false;
+            }
+            if (!user.HasConcentration)
+            {
+                return false;
+            }
+            // Add additional checks as needed for specific saving throws or other requirements.
+            return true;
 		}
 		
 	}

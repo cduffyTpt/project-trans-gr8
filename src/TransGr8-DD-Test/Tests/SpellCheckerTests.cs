@@ -46,10 +46,30 @@ namespace TransGr8_DD_Test.Tests
 				Duration = "Instantaneous",
 				SavingThrow = ""
 			});
+            //spells.Add(new Spell
+            //{
+            //    Name = "Command",
+            //    Level = 1,
+            //    CastingTime = "1 action",
+            //    Components = "V, S",
+            //    Range = 120,
+            //    Duration = "Instantaneous",
+            //    SavingThrow = ""
+            //});
+            //spells.Add(new Spell
+            //{
+            //    Name = "Identify",
+            //    Level = 1,
+            //    CastingTime = "1 action",
+            //    Components = "V, S, M",
+            //    Range = 120,
+            //    Duration = "Instantaneous",
+            //    SavingThrow = ""
+            //});
 
 
-			// Create a new User object with default values for testing.
-			user = new User
+            // Create a new User object with default values for testing.
+            user = new User
 			{
 				Level = 3,
 				HasVerbalComponent = true,

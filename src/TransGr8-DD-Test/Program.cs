@@ -1,11 +1,21 @@
-﻿namespace TransGr8_DD_Test
+﻿using Serilog;
+using System.Text.Json;
+
+namespace TransGr8_DD_Test
 {
 	public class Program
 	{
 		static void Main(string[] args)
 		{
-			// Create a user with some attributes.
-			List<Spell> spells = new List<Spell>();
+			// Add Logger
+            var log = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.File("myapp.txt")
+                .CreateLogger();
+
+
+            // Create List of Spells with some attributes.
+            List<Spell> spells = new List<Spell>();
 			spells.Add(new Spell
 			{
 				Name = "Fireball",
@@ -38,24 +48,29 @@
 			});
 
 			// Create a user with some attributes.
-			User user = new User
-			{
-				Level = 3,
-				HasVerbalComponent = true,
-				HasSomaticComponent = true,
-				HasMaterialComponent = true,
-				Range = 200,
-				HasConcentration = true
-			};
+			//User user = new User
+			//{
+			//	Level = 3,
+			//	HasVerbalComponent = true,
+			//	HasSomaticComponent = true,
+			//	HasMaterialComponent = true,
+			//	Range = 200,
+			//	HasConcentration = true
+			//};
 
-			string spellName = args[0];
+			//Load User from Json File
+            var json = File.ReadAllText("User.json");
+            List<User> users = JsonSerializer.Deserialize<List<User>>(json);
+
+            string spellName = args[0];
 			// Use the spell checker to determine if the user can cast the spell.
 			SpellChecker spellChecker = new SpellChecker(spells);
-			bool canCast = spellChecker.CanUserCastSpell(user, spellName);
+			bool canCast = spellChecker.CanUserCastSpell(users?.FirstOrDefault(), spellName);
 
-			// Output the result.
-			Console.WriteLine("Can the user cast {0}? {1}", spellName, canCast);
-			Console.ReadKey();
-		}
+            // Output the result. (For Log File Check Bin/Debug Directory)
+            log.Information("Can the user cast {0}? {1}", spellName, canCast);
+            Console.WriteLine("Can the user cast {0}? {1}", spellName, canCast);
+            Console.ReadKey();
+        }
 	}
 }
