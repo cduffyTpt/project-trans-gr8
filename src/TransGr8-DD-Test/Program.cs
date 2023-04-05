@@ -58,7 +58,7 @@ namespace TransGr8_DD_Test
 			//	HasConcentration = true
 			//};
 
-			//Load User from Json File
+			//Load User from Json File (CopyToOutputDirectory should be set to Always)
             var json = File.ReadAllText("User.json");
             List<User> users = JsonSerializer.Deserialize<List<User>>(json);
 

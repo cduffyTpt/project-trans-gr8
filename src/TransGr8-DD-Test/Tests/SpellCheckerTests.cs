@@ -170,7 +170,7 @@ namespace TransGr8_DD_Test.Tests
 		}
 
 		[Test]
-		public void TestCanUserCastSpellReturnsFalseForMissingConcentration()
+        public void TestCanUserCastSpellReturnsFalseForMissingConcentration()
 		{
 			// Arrange
 			SpellChecker spellChecker = new SpellChecker(spells);

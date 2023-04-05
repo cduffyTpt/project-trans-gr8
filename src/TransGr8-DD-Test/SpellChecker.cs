@@ -13,6 +13,7 @@
 		{
 			Spell spell = _spellList.Find(s => s.Name == spellName);
 			
+			// No need to specify spells in my tests , if i doesn't exist it will return false
 			if(spell == null)
 			{
 				return false;
