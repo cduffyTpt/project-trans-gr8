@@ -1,61 +1,72 @@
-﻿namespace TransGr8_DD_Test
+﻿using Serilog;
+using TransGr8_DD_Test.Models;
+using TransGr8_DD_Test.Services;
+
+namespace TransGr8_DD_Test;
+
+public class Program
 {
-	public class Program
-	{
-		static void Main(string[] args)
-		{
-			// Create a user with some attributes.
-			List<Spell> spells = new List<Spell>();
-			spells.Add(new Spell
-			{
-				Name = "Fireball",
-				Level = 3,
-				CastingTime = "1 action",
-				Components = "V, S, M (a tiny ball of bat guano and sulfur)",
-				Range = 150,
-				Duration = "Instantaneous",
-				SavingThrow = "Dexterity"
-			});
-			spells.Add(new Spell
-			{
-				Name = "Magic Missile",
-				Level = 1,
-				CastingTime = "1 action",
-				Components = "V, S",
-				Range = 120,
-				Duration = "Instantaneous",
-				SavingThrow = ""
-			});
-			spells.Add(new Spell
-			{
-				Name = "Cure Wounds",
-				Level = 1,
-				CastingTime = "1 action",
-				Components = "V, S",
-				Range = 1,
-				Duration = "Instantaneous",
-				SavingThrow = ""
-			});
+    static void Main(string[] args)
+    {
+        Log.Logger = new LoggerConfiguration().MinimumLevel.Debug()
+            .WriteTo.Console()
+            .CreateLogger();
 
-			// Create a user with some attributes.
-			User user = new User
-			{
-				Level = 3,
-				HasVerbalComponent = true,
-				HasSomaticComponent = true,
-				HasMaterialComponent = true,
-				Range = 200,
-				HasConcentration = true
-			};
+        var spells = new List<Spell>
+        {
+            new Spell
+            {
+                Name = "Fireball",
+                Level = 3,
+                CastingTime = "1 action",
+                Components = "V, S, M (a tiny ball of bat guano and sulfur)",
+                Range = 150,
+                Duration = "Instantaneous",
+                SavingThrow = "Dexterity"
+            },
+            new Spell
+            {
+                Name = "Magic Missile",
+                Level = 1,
+                CastingTime = "1 action",
+                Components = "V, S",
+                Range = 120,
+                Duration = "Instantaneous",
+                SavingThrow = ""
+            },
+            new Spell
+            {
+                Name = "Cure Wounds",
+                Level = 1,
+                CastingTime = "1 action",
+                Components = "V, S",
+                Range = 1,
+                Duration = "Instantaneous",
+                SavingThrow = ""
+            }
+        };
 
-			string spellName = args[0];
-			// Use the spell checker to determine if the user can cast the spell.
-			SpellChecker spellChecker = new SpellChecker(spells);
-			bool canCast = spellChecker.CanUserCastSpell(user, spellName);
+        var spellName = args[0];
+        var spellChecker = new SpellChecker(spells);
 
-			// Output the result.
-			Console.WriteLine("Can the user cast {0}? {1}", spellName, canCast);
-			Console.ReadKey();
-		}
-	}
+        Log.Information("Please enter the index of the user to check the Spell for");
+        if (!int.TryParse(Console.ReadLine(), out var index))
+        {
+            Log.Error("Index not valid, You should enter an integer value");
+            return;
+        }
+
+        var user = UserData.GetUserByIndex(index);
+        if (user is null)
+        {
+            Log.Warning("User was not found or index is out of range");
+            return;
+        }
+
+        var canCast = spellChecker.CanUserCastSpell(user, spellName);
+
+        Log.Information("Can the user cast {spellName}? {canCast}", spellName, canCast);
+
+        Console.ReadKey();
+    }
 }
