@@ -3,29 +3,31 @@
     public class SpellChecker
 	{
 		private readonly ISpellRepository _spellRepository;
+		private readonly ICheckerEngine _checkerEngine;
 
-		internal SpellChecker(List<Spell> spells)
+        internal SpellChecker(ISpellRepository spellRepository, ICheckerEngine checkerEngine)
+        {
+            _spellRepository = spellRepository;
+            _checkerEngine = checkerEngine;
+        }
+
+        internal SpellChecker(List<Spell> spells) : this(new SpellRepository(spells), new CheckerEngine())
 		{
-			_spellRepository = new SpellRepository(spells);
+			_checkerEngine.Register(new LevelChecker());
+			_checkerEngine.Register(new VerbalComponentChecker());
+			_checkerEngine.Register(new SomaticComponentChecker());
+			_checkerEngine.Register(new MaterialComponentChecker());
+			_checkerEngine.Register(new RangeChecker());
+			_checkerEngine.Register(new ConcentrationChecker());
 		}
 
 		public bool CanUserCastSpell(User user, string spellName)
 		{
 			Spell spell = _spellRepository.GetSpell(spellName);
-			if (user.Level < spell.Level)
-				return false;
-			if (!user.HasVerbalComponent && spell.Components.Contains("V"))
-				return false;
-			if (!user.HasSomaticComponent && spell.Components.Contains("S"))
-				return false;
-			if (!user.HasMaterialComponent && spell.Components.Contains("M"))
-				return false;
-			if (user.Range < spell.Range)
-				return false;
-			if (!user.HasConcentration && spell.Duration.Contains("Concentration"))
-				return false;
-			// Add additional checks as needed for specific saving throws or other requirements.
-			return true;
+			return _checkerEngine.Check(user, spell);
 		}
 	}
 }
+
+
+
