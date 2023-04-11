@@ -46,8 +46,36 @@ namespace TransGr8_DD_Test.Tests
 				Duration = "Instantaneous",
 				SavingThrow = ""
 			});
-
-
+			spells.Add(new Spell
+			{
+				Name = "Command",
+				Level = 1,
+				CastingTime = "1 action",
+				Components = "V",
+				Range = 1,
+				Duration = "Instantaneous",
+				SavingThrow = ""
+			});
+			spells.Add(new Spell
+			{
+				Name = "Identify",
+				Level = 1,
+				CastingTime = "1 action",
+				Components = "M",
+				Range = 1,
+				Duration = "Instantaneous",
+				SavingThrow = ""
+			});
+			spells.Add(new Spell
+			{
+				Name = "Hold Person",
+				Level = 1,
+				CastingTime = "1 action",
+				Components = "M, V, S",
+				Range = 1,
+				Duration = "Concentration",
+				SavingThrow = ""
+			});
 			// Create a new User object with default values for testing.
 			user = new User
 			{
@@ -162,6 +190,16 @@ namespace TransGr8_DD_Test.Tests
 
 			// Assert
 			Assert.False(result);
+		}
+		[Test]
+		public void TestCanUserCastSpellThrowsSpellNotFoundExceptionForMissingSpells()
+		{
+			// Arrange
+			SpellChecker spellChecker = new SpellChecker(spells);
+			var spellName = Guid.NewGuid().ToString()[..6];
+			// Act
+			// Assert
+			Assert.Throws<SpellNotFoundException>(() => spellChecker.CanUserCastSpell(user, spellName));
 		}
 	}
 }
