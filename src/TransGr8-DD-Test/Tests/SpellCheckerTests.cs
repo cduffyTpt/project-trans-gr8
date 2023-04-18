@@ -1,167 +1,134 @@
 ﻿using NUnit.Framework;
+using Serilog;
+using TransGr8_DD_Test.Services;
 
 namespace TransGr8_DD_Test.Tests
 {
 
-	[TestFixture]
-	public class SpellCheckerTests
-	{
+    [TestFixture]
+    public class SpellCheckerTests
+    {
 
 
-		private List<Spell> spells;
-		private User user;
+        private List<Spell> spells;
+        private User user;
 
-		[SetUp]
-		public void Setup()
-		{
+        [SetUp]
+        public void Setup()
+        {
+            LoggerService loggerService = new LoggerService();
+            Log.Information("This is a log test");
 
-			spells = new List<Spell>();
-			spells.Add(new Spell
-			{
-				Name = "Fireball",
-				Level = 3,
-				CastingTime = "1 action",
-				Components = "V, S, M (a tiny ball of bat guano and sulfur)",
-				Range = 150,
-				Duration = "Instantaneous",
-				SavingThrow = "Dexterity"
-			});
-			spells.Add(new Spell
-			{
-				Name = "Magic Missile",
-				Level = 1,
-				CastingTime = "1 action",
-				Components = "V, S",
-				Range = 120,
-				Duration = "Instantaneous",
-				SavingThrow = ""
-			});
-			spells.Add(new Spell
-			{
-				Name = "Cure Wounds",
-				Level = 1,
-				CastingTime = "1 action",
-				Components = "V, S",
-				Range = 1,
-				Duration = "Instantaneous",
-				SavingThrow = ""
-			});
+            //Get the list of spells from the spells service instead of having their definition here
+            spells = SpellService.GetSpells();
 
 
-			// Create a new User object with default values for testing.
-			user = new User
-			{
-				Level = 3,
-				HasVerbalComponent = true,
-				HasSomaticComponent = true,
-				HasMaterialComponent = true,
-				Range = 200,
-				HasConcentration = true
-			};
-		}
+            // Get a user from User service and pick one for testing
+            user = UserService.GetUsers()[0];
+        }
 
-		[Test]
-		public void TestCanUserCastSpellReturnsTrue()
-		{
-			// Arrange
-			SpellChecker spellChecker = new SpellChecker(spells);
-			string spellName = "Fireball";
+        [Test]
+        public void TestCanUserCastSpellReturnsTrue()
+        {
+            // Arrange
+            SpellChecker spellChecker = new SpellChecker(spells);
+            string spellName = "Fireball";
 
-			// Act
-			bool result = spellChecker.CanUserCastSpell(user, spellName);
+            // Act
+            bool result = spellChecker.CanUserCastSpell(user, spellName);
 
-			// Assert
-			Assert.True(result);
-		}
+            // Assert
+            Assert.True(result);
+        }
 
-		[Test]
-		public void TestCanUserCastSpellReturnsFalseForInsufficientLevel()
-		{
-			// Arrange
-			SpellChecker spellChecker = new SpellChecker(spells);
-			string spellName = "Fireball";
-			user.Level = 2;
+        [Test]
+        public void TestCanUserCastSpellReturnsFalseForInsufficientLevel()
+        {
+            // Arrange
+            SpellChecker spellChecker = new SpellChecker(spells);
+            string spellName = "Fireball";
+            user.Level = 2;
 
-			// Act
-			bool result = spellChecker.CanUserCastSpell(user, spellName);
+            // Act
+            bool result = spellChecker.CanUserCastSpell(user, spellName);
 
-			// Assert
-			Assert.False(result);
-		}
+            // Assert
+            Assert.False(result);
+        }
 
-		[Test]
-		public void TestCanUserCastSpellReturnsFalseForMissingVerbalComponent()
-		{
-			// Arrange
-			SpellChecker spellChecker = new SpellChecker(spells);
-			string spellName = "Command";
-			user.HasVerbalComponent = false;
+        [Test]
+        public void TestCanUserCastSpellReturnsFalseForMissingVerbalComponent()
+        {
+            // Arrange
+            SpellChecker spellChecker = new SpellChecker(spells);
+            string spellName = "Command";
+            user.HasVerbalComponent = false;
 
-			// Act
-			bool result = spellChecker.CanUserCastSpell(user, spellName);
+            // Act
+            bool result = spellChecker.CanUserCastSpell(user, spellName);
 
-			// Assert
-			Assert.False(result);
-		}
+            // Assert
+            Assert.False(result);
+        }
 
-		[Test]
-		public void TestCanUserCastSpellReturnsFalseForMissingSomaticComponent()
-		{
-			// Arrange
-			SpellChecker spellChecker = new SpellChecker(spells);
-			string spellName = "Cure Wounds";
-			user.HasSomaticComponent = false;
+        [Test]
+        public void TestCanUserCastSpellReturnsFalseForMissingSomaticComponent()
+        {
+            // Arrange
+            SpellChecker spellChecker = new SpellChecker(spells);
+            string spellName = "Cure Wounds";
+            user.HasSomaticComponent = false;
 
-			// Act
-			bool result = spellChecker.CanUserCastSpell(user, spellName);
+            // Act
+            bool result = spellChecker.CanUserCastSpell(user, spellName);
 
-			// Assert
-			Assert.False(result);
-		}
+            // Assert
+            Assert.False(result);
+        }
 
-		[Test]
-		public void TestCanUserCastSpellReturnsFalseForMissingMaterialComponent()
-		{
-			// Arrange
-			SpellChecker spellChecker = new SpellChecker(spells);
-			string spellName = "Identify";
-			user.HasMaterialComponent = false;
+        [Test]
+        public void TestCanUserCastSpellReturnsFalseForMissingMaterialComponent()
+        {
+            // Arrange
+            SpellChecker spellChecker = new SpellChecker(spells);
+            string spellName = "Identify";
+            user.HasMaterialComponent = false;
 
-			// Act
-			bool result = spellChecker.CanUserCastSpell(user, spellName);
+            // Act
+            bool result = spellChecker.CanUserCastSpell(user, spellName);
 
-			// Assert
-			Assert.False(result);
-		}
+            // Assert
+            Assert.False(result);
+        }
 
-		[Test]
-		public void TestCanUserCastSpellReturnsFalseForInsufficientRange()
-		{
-			// Arrange
-			SpellChecker spellChecker = new SpellChecker(spells);
-			string spellName = "Fireball";
-			user.Range = 20;
+        [Test]
+        public void TestCanUserCastSpellReturnsFalseForInsufficientRange()
+        {
+            // Arrange
+            SpellChecker spellChecker = new SpellChecker(spells);
+            string spellName = "Fireball";
+            user.Range = 20;
 
-			// Act
-			bool result = spellChecker.CanUserCastSpell(user, spellName);
+            // Act
+            bool result = spellChecker.CanUserCastSpell(user, spellName);
 
-			// Assert
-			Assert.False(result);
-		}
+            // Assert
+            Assert.False(result);
+        }
 
-		[Test]
-		public void TestCanUserCastSpellReturnsFalseForMissingConcentration()
-		{
-			// Arrange
-			SpellChecker spellChecker = new SpellChecker(spells);
-			string spellName = "Hold Person";
-			user.HasConcentration = false;
+        [Test]
+        public void TestCanUserCastSpellReturnsFalseForMissingConcentration()
+        {
+            // Arrange
+            SpellChecker spellChecker = new SpellChecker(spells);
+            string spellName = "Hold Person";
+            user.HasConcentration = false;
 
-			// Act
-			bool result = spellChecker.CanUserCastSpell(user, spellName);
+            // Act
+            bool result = spellChecker.CanUserCastSpell(user, spellName);
 
-			// Assert
-			Assert.False(result);
-		}
-	}
+            // Assert
+            Assert.False(result);
+        }
+    }
 }
