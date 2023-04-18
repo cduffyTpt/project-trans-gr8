@@ -2,6 +2,7 @@
 {
 	public class User
 	{
+		public string Name { get; set; }
 		public int Level { get; set; }
 		public bool HasVerbalComponent { get; set; }
 		public bool HasSomaticComponent { get; set; }

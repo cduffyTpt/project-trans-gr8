@@ -163,5 +163,71 @@ namespace TransGr8_DD_Test.Tests
 			// Assert
 			Assert.False(result);
 		}
-	}
+
+
+        // ADDED TESTS
+        
+
+        [Test]
+        public void TestCanUserCastSpellReturnsFalseForUnknownSpell() // Spell is unknown
+        {
+            // Arrange
+            SpellChecker spellChecker = new SpellChecker(spells);
+            string spellName = "Firebolt";
+
+            // Act
+            bool result = spellChecker.CanUserCastSpell(user, spellName);
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Test]
+        public void TestCanUserCastSpellReturnsTrueForNoComponentsRequired() // No components are required
+        {
+            // Arrange
+            SpellChecker spellChecker = new SpellChecker(spells);
+            string spellName = "Magic Missile";
+            user.HasVerbalComponent = false;
+            user.HasSomaticComponent = false;
+            user.HasMaterialComponent = false;
+
+            // Act
+            bool result = spellChecker.CanUserCastSpell(user, spellName);
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Test]
+        public void TestCanUserCastSpellReturnsFalseForNonInstantaneousDuration() // The duration is not instantaneous
+        {
+            // Arrange
+            SpellChecker spellChecker = new SpellChecker(spells);
+            string spellName = "Hold Person";
+            user.HasConcentration = false;
+
+            // Act
+            bool result = spellChecker.CanUserCastSpell(user, spellName);
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Test]
+        public void TestCanUserCastSpellReturnsTrueForHigherLevel() // The user has a higher level than the required level
+        {
+            // Arrange
+            SpellChecker spellChecker = new SpellChecker(spells);
+            string spellName = "Fireball";
+            user.Level = 4;
+
+            // Act
+            bool result = spellChecker.CanUserCastSpell(user, spellName);
+
+            // Assert
+            Assert.True(result);
+        }
+
+    }
 }
