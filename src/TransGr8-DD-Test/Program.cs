@@ -1,12 +1,27 @@
-﻿namespace TransGr8_DD_Test
+﻿using Newtonsoft.Json;
+using Serilog;
+using TransGr8_DD_Test.Interface;
+
+namespace TransGr8_DD_Test
 {
 	public class Program
 	{
 		static void Main(string[] args)
 		{
-			// Create a user with some attributes.
-			List<Spell> spells = new List<Spell>();
-			spells.Add(new Spell
+			//Code to import users from json
+            //List<User> users;
+            //string jsonFilePath = ".\\usersmocked.json";
+            //using (StreamReader r = new StreamReader(jsonFilePath))
+            //{
+            //    string json = r.ReadToEnd();
+            //    users = JsonConvert.DeserializeObject<List<User>>(json);
+            //}
+            Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console()
+            .CreateLogger();
+            // Create a user with some attributes.
+            ISpellRepository spellRepository = new SpellRepository();
+            spellRepository.AddSpell(new Spell
 			{
 				Name = "Fireball",
 				Level = 3,
@@ -16,7 +31,7 @@
 				Duration = "Instantaneous",
 				SavingThrow = "Dexterity"
 			});
-			spells.Add(new Spell
+			spellRepository.AddSpell(new Spell
 			{
 				Name = "Magic Missile",
 				Level = 1,
@@ -26,7 +41,7 @@
 				Duration = "Instantaneous",
 				SavingThrow = ""
 			});
-			spells.Add(new Spell
+			spellRepository.AddSpell(new Spell
 			{
 				Name = "Cure Wounds",
 				Level = 1,
@@ -48,13 +63,13 @@
 				HasConcentration = true
 			};
 
-			string spellName = args[0];
+			string spellName = "Cure Wounds";
 			// Use the spell checker to determine if the user can cast the spell.
-			SpellChecker spellChecker = new SpellChecker(spells);
+			SpellChecker spellChecker = new SpellChecker(spellRepository);
 			bool canCast = spellChecker.CanUserCastSpell(user, spellName);
 
 			// Output the result.
-			Console.WriteLine("Can the user cast {0}? {1}", spellName, canCast);
+			Log.Information("Can the user cast {0}? {1}", spellName, canCast);
 			Console.ReadKey();
 		}
 	}

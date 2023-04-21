@@ -1,17 +1,25 @@
-﻿namespace TransGr8_DD_Test
+﻿using TransGr8_DD_Test.Interface;
+
+namespace TransGr8_DD_Test
 {
-	public class SpellChecker
-	{
-		private readonly List<Spell> _spellList;
+    public class SpellChecker: ISpellChecker { 
+    
+        private readonly ISpellRepository _spellRepository;
+        private List<Spell> _spells;
 
-		public SpellChecker(List<Spell> spells)
-		{
-			_spellList = spells;
-		}
+        public SpellChecker(ISpellRepository spellRepository)
+        {
+            _spellRepository = spellRepository;
+        }
 
-		public bool CanUserCastSpell(User user, string spellName)
+        public SpellChecker(List<Spell> spells)
+        {
+            _spells = spells;
+        }
+
+        public bool CanUserCastSpell(User user, string spellName)
 		{
-			Spell spell = _spellList.Find(s => s.Name == spellName);
+			Spell spell = _spellRepository.GetSpellByName(spellName);
 			
 			if (user.Level < spell.Level)
 			{
@@ -24,7 +32,7 @@
 					return false;
 				}
 			}
-			else if (spell.Components.Contains("S"))
+			if (spell.Components.Contains("S"))
 			{
 				if (!user.HasSomaticComponent)
 				{
