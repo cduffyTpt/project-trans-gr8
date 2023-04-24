@@ -1,0 +1,29 @@
+[
+    {
+      "Name": "test1",
+      "Level": 3,
+      "HasVerbalComponent": true,
+      "HasSomaticComponent": true,
+      "HasMaterialComponent": true,
+      "Range": 110,
+      "HasConcentration": true
+    },
+    {
+      "Name": "test2",
+      "Level": 1,
+      "HasVerbalComponent": true,
+      "HasSomaticComponent": true,
+      "HasMaterialComponent": false,
+      "Range": 120,
+      "HasConcentration": false
+    },
+    {
+      "Name": "test3",
+      "Level": 4,
+      "HasVerbalComponent": false,
+      "HasSomaticComponent": false,
+      "HasMaterialComponent": true,
+      "Range": 160,
+      "HasConcentration": true
+    }
+  ]

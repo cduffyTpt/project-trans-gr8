@@ -114,7 +114,6 @@ namespace TransGr8_DD_Test.Tests
 
 			// Act
 			bool result = spellChecker.CanUserCastSpell(user, spellName);
-
 			// Assert
 			Assert.False(result);
 		}
@@ -163,5 +162,49 @@ namespace TransGr8_DD_Test.Tests
 			// Assert
 			Assert.False(result);
 		}
+		[Test]
+        public void TestCanUserCastSpellReturnsFalseForMissingSavingThrow()
+        {
+            // Arrange
+            SpellChecker spellChecker = new SpellChecker(spells);
+            string spellName = "Magic Missile";
+            spells[1].SavingThrow = ""; // Set SavingThrow to empty string
+
+            // Act
+            bool result = spellChecker.CanUserCastSpell(user, spellName);
+
+            // Assert
+            Assert.False(result);
+        }
+		[Test]
+		public void TestCanUserCastSpellReturnsFalseForUnknownSpell()
+		{
+			// Arrange
+			SpellChecker spellChecker = new SpellChecker(spells);
+			string spellName = "Unknown Spell";
+
+			// Act
+			bool result = spellChecker.CanUserCastSpell(user, spellName);
+
+			// Assert
+			Assert.False(result);
+		}
+
+		[Test]
+		public void TestCanUserCastSpellReturnsTrueForSpellWithEmptyComponents() //check if the spell has a component
+		{
+			string spellName = "Magic Missile";
+            spells[1].Components = ""; // Set Components to empty string
+			spells[1].SavingThrow = "Test"; 
+			SpellChecker spellChecker = new SpellChecker(spells);
+
+
+			// Act
+			bool result = spellChecker.CanUserCastSpell(user, spellName);
+
+			// Assert
+			Assert.True(result);
+		}
+        
 	}
 }
