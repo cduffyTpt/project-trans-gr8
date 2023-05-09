@@ -1,0 +1,58 @@
+﻿[
+  {
+    "Level": 1,
+    "Range": 2,
+    "HasVerbalComponent": false,
+    "HasSomaticComponent": false,
+    "HasMaterialComponent": true,
+    "HasConcentration": true
+  },
+  {
+    "Level": 3,
+    "Range": 3,
+    "HasVerbalComponent": true,
+    "HasSomaticComponent": true,
+    "HasMaterialComponent": true,
+    "HasConcentration": true
+  },
+  {
+    "Level": 4,
+    "Range": 4,
+    "HasVerbalComponent": true,
+    "HasSomaticComponent": true,
+    "HasMaterialComponent": true,
+    "HasConcentration": true
+  },
+  {
+    "Level": 1,
+    "Range": 2,
+    "HasVerbalComponent": false,
+    "HasSomaticComponent": false,
+    "HasMaterialComponent": false,
+    "HasConcentration": false
+  },
+  {
+    "Level": 1,
+    "Range": 2,
+    "HasVerbalComponent": false,
+    "HasSomaticComponent": false,
+    "HasMaterialComponent": true,
+    "HasConcentration": true
+  },
+  {
+    "Level": 1,
+    "Range": 2,
+    "HasVerbalComponent": false,
+    "HasSomaticComponent": false,
+    "HasMaterialComponent": true,
+    "HasConcentration": true
+  },
+  {
+    "Level": 1,
+    "Range": 2,
+    "HasVerbalComponent": false,
+    "HasSomaticComponent": false,
+    "HasMaterialComponent": true,
+    "HasConcentration": true
+  }
+]

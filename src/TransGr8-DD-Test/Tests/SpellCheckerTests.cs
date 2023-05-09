@@ -1,55 +1,31 @@
 ﻿using NUnit.Framework;
+using TransGr8_DD_Test.Interfaces;
+using TransGr8_DD_Test.Spells;
 
 namespace TransGr8_DD_Test.Tests
 {
 
-	[TestFixture]
-	public class SpellCheckerTests
+    [TestFixture]
+	public abstract class SpellCheckerTests
 	{
 
 
-		private List<Spell> spells;
-		private User user;
+		protected List<ISpell> spells;
+		protected User user;
 
 		[SetUp]
 		public void Setup()
 		{
 
-			spells = new List<Spell>();
-			spells.Add(new Spell
-			{
-				Name = "Fireball",
-				Level = 3,
-				CastingTime = "1 action",
-				Components = "V, S, M (a tiny ball of bat guano and sulfur)",
-				Range = 150,
-				Duration = "Instantaneous",
-				SavingThrow = "Dexterity"
-			});
-			spells.Add(new Spell
-			{
-				Name = "Magic Missile",
-				Level = 1,
-				CastingTime = "1 action",
-				Components = "V, S",
-				Range = 120,
-				Duration = "Instantaneous",
-				SavingThrow = ""
-			});
-			spells.Add(new Spell
-			{
-				Name = "Cure Wounds",
-				Level = 1,
-				CastingTime = "1 action",
-				Components = "V, S",
-				Range = 1,
-				Duration = "Instantaneous",
-				SavingThrow = ""
-			});
+			spells = new List<ISpell>();
+
+            spells.Add(new FireballSpell());
+            spells.Add(new MagicMissileSpell());
+            spells.Add(new CureWoundsSpell());
 
 
-			// Create a new User object with default values for testing.
-			user = new User
+            // Create a new User object with default values for testing.
+            user = new User
 			{
 				Level = 3,
 				HasVerbalComponent = true,

@@ -1,56 +1,55 @@
-﻿namespace TransGr8_DD_Test
-{
-	public class SpellChecker
-	{
-		private readonly List<Spell> _spellList;
+﻿using TransGr8_DD_Test.Component;
+using TransGr8_DD_Test.Components;
+using TransGr8_DD_Test.Interfaces;
 
-		public SpellChecker(List<Spell> spells)
+namespace TransGr8_DD_Test
+{
+    public class SpellChecker
+	{
+		private readonly List<ISpell> _spellList;
+
+		public SpellChecker(List<ISpell> spells)
 		{
 			_spellList = spells;
 		}
 
 		public bool CanUserCastSpell(User user, string spellName)
 		{
-			Spell spell = _spellList.Find(s => s.Name == spellName);
+            ISpell spell = _spellList.Find(s => s.Name == spellName);
 			
+			if(spell == null) return false;
+
 			if (user.Level < spell.Level)
 			{
 				return false;
 			}
-			if (spell.Components.Contains("V"))
+
+			foreach (IComponent component in spell.Components)
 			{
-				if (!user.HasVerbalComponent)
+				if ((component is MaterialComponent && !user.HasMaterialComponent) 
+					|| (component is SomaticComponent && !user.HasSomaticComponent) 
+					|| (component is VerbalComponent && !user.HasVerbalComponent)
+					)
 				{
 					return false;
 				}
+
 			}
-			else if (spell.Components.Contains("S"))
-			{
-				if (!user.HasSomaticComponent)
-				{
-					return false;
-				}
-			}
-			else if (spell.Components.Contains("M"))
-			{
-				if (!user.HasMaterialComponent)
-				{
-					return false;
-				}
-			}
+
 			if (user.Range < spell.Range)
 			{
 				return false;
 			}
-			if (spell.Duration.Contains("Concentration"))
+
+			if (spell.Duration.Contains("Concentration") && !user.HasConcentration)
 			{
-				if (!user.HasConcentration)
-				{
-					return false;
-				}
+				return false;
+				
 			}
-			// Add additional checks as needed for specific saving throws or other requirements.
-			return true;
+
+
+			return true; 
+		
 		}
 		
 	}
