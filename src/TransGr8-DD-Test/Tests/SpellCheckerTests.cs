@@ -4,7 +4,7 @@ namespace TransGr8_DD_Test.Tests
 {
 
 	[TestFixture]
-	public class SpellCheckerTests
+    public class SpellCheckerTests
 	{
 
 
