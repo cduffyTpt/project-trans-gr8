@@ -1,57 +1,48 @@
-﻿namespace TransGr8_DD_Test
+﻿using TransGr8_DD_Test.Rules;
+
+namespace TransGr8_DD_Test
 {
-	public class SpellChecker
-	{
-		private readonly List<Spell> _spellList;
+    public class SpellChecker
+    {
+        private readonly List<Spell> _spellList;
+        private readonly IEnumerable<ISpellRule> _rules;
 
-		public SpellChecker(List<Spell> spells)
-		{
-			_spellList = spells;
-		}
+        public SpellChecker(List<Spell> spells)
+        {
+            _spellList = spells;
+            _rules = GetRules();
+        }
 
-		public bool CanUserCastSpell(User user, string spellName)
-		{
-			Spell spell = _spellList.Find(s => s.Name == spellName);
-			
-			if (user.Level < spell.Level)
-			{
-				return false;
-			}
-			if (spell.Components.Contains("V"))
-			{
-				if (!user.HasVerbalComponent)
-				{
-					return false;
-				}
-			}
-			else if (spell.Components.Contains("S"))
-			{
-				if (!user.HasSomaticComponent)
-				{
-					return false;
-				}
-			}
-			else if (spell.Components.Contains("M"))
-			{
-				if (!user.HasMaterialComponent)
-				{
-					return false;
-				}
-			}
-			if (user.Range < spell.Range)
-			{
-				return false;
-			}
-			if (spell.Duration.Contains("Concentration"))
-			{
-				if (!user.HasConcentration)
-				{
-					return false;
-				}
-			}
-			// Add additional checks as needed for specific saving throws or other requirements.
-			return true;
-		}
-		
-	}
+        public bool CanUserCastSpell(User user, string spellName)
+        {
+            Spell spell = _spellList.Find(s => s.Name == spellName);
+
+            if (spell is null)
+            {
+                return false;
+            }
+
+            foreach (var rule in _rules)
+            {
+                if (!rule.Satisfy(user, spell))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private IEnumerable<ISpellRule> GetRules()
+        {
+            var ruleType = typeof(ISpellRule);
+
+            IEnumerable<ISpellRule> output = GetType().Assembly.GetTypes()
+                 .Where(p => ruleType.IsAssignableFrom(p) && !p.IsInterface)
+                 .Select(r => Activator.CreateInstance(r) as ISpellRule)
+                 .OrderBy(x => x.Ordinal);
+
+            return output;
+        }
+    }
 }
