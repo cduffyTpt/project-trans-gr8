@@ -23,7 +23,7 @@ When the Spell is "Cure Wounds" and the User DOES NOT HAVE "Somatic Component" t
  1. SpellChecker.cs
  2. SpellCheckerTests.cs
 
-### Optional Extras (NOT REQUIRED)
+### Optional Extras (not required)
 1. Load all users into the application - Via a JSON File
 2. Select a User to Check the Spell for
 3. Use a Logger (Serilog) to write the messages rather than a Console.WriteLine statement.
