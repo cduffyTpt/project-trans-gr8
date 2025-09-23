@@ -1,29 +1,47 @@
-# Dungeons & Dragons Spell Checker
+# D&D Spell Checker - Interview Test
 
-As an avid D&D player, I have written an application which allows me to check if a user has the correct stats to cast spells in my quest. 
+## What is this?
+This is a **job interview coding test**. You will work on a program that checks if a player can cast magic spells in Dungeons & Dragons game. It looks at the player's stats and tells you "yes" or "no".
 
-I have a found some bug in the code but not too sure about how to fix it. 
+**Important:** Your completed code will be discussed during your interview. We will review your solution together and ask questions about your approach.
 
-I have read some things online about a principal called SOLID and Rule Engines which I think may help me identify and fix the issue. 
+## The Problem
+There is a **bug** (error) in the code. The program says players can cast spells when they should not be able to.
 
+**Bug Details:**
+- Spell name: "Cure Wounds"
+- Problem: Players without "Somatic Component" can still cast this spell
+- This is wrong - they should NOT be able to cast it
 
-## Task
-1. I would like the code fixed so that we follow the new principal, without changing the signature of the Method `public bool CanUserCastSpell(User user, string spellName)` 
-2. I would like the Bug identified and fixed
-3. I would like the Unit Tests provided to be extended so they capture new tests as they are required
+## What You Need to Do
 
+### Main Tasks (Required)
+1. **Copy this project** 
+   - Fork this repository
+   - Create a Pull Request back to the original
 
-## Bug
-The bug is defined as such:
+2. **Fix the code**
+   - Use SOLID principles and Rule Engines
+   - Keep this method signature the same: `public bool CanUserCastSpell(User user, string spellName)`
+   - Fix the bug described above
 
-When the Spell is "Cure Wounds" and the User DOES NOT HAVE "Somatic Component" then they are still able to cast the spell. 
+3. **Add more tests**
+   - Extend the unit tests 
+   - Add new tests as needed
 
-### HINT
- The code which needs to be modified is centered in 2 files
- 1. SpellChecker.cs
- 2. SpellCheckerTests.cs
+### Files to Change
+- `SpellChecker.cs` (main code)
+- `SpellCheckerTests.cs` (test code)
 
-### Optional Extras (not required)
-1. Load all users into the application - Via a JSON File
-2. Select a User to Check the Spell for
-3. Use a Logger (Serilog) to write the messages rather than a Console.WriteLine statement.
+### Extra Tasks (Optional)
+If you want to do more:
+1. Load user data from a JSON file
+2. Let users select which player to check
+3. Use Serilog for logging instead of `Console.WriteLine`
+
+## What This Test Shows
+This test allows us to evaluate:
+- Your knowledge of SOLID programming principles
+- Your ability to implement Rule Engine patterns
+- Your debugging and problem-solving skills
+- Your approach to writing unit tests
