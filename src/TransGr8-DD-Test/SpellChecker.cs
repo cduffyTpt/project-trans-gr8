@@ -2,16 +2,16 @@
 {
 	public class SpellChecker
 	{
-		private readonly List<Spell> _spellList;
-
-		public SpellChecker(List<Spell> spells)
-		{
-			_spellList = spells;
-		}
+        private readonly ISpellRepository _spellRepository;
+        
+        public SpellChecker(ISpellRepository spellRepository)
+        {
+            _spellRepository = spellRepository;
+        }
 
 		public bool CanUserCastSpell(User user, string spellName)
 		{
-			Spell spell = _spellList.Find(s => s.Name == spellName);
+			Spell spell = _spellRepository.FindByName(spellName);
 			
 			if (user.Level < spell.Level)
 			{
@@ -24,7 +24,7 @@
 					return false;
 				}
 			}
-			else if (spell.Components.Contains("S"))
+            if (spell.Components.Contains("S"))
 			{
 				if (!user.HasSomaticComponent)
 				{

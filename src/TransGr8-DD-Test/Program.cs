@@ -42,7 +42,7 @@
 			{
 				Level = 3,
 				HasVerbalComponent = true,
-				HasSomaticComponent = true,
+				HasSomaticComponent = false,
 				HasMaterialComponent = true,
 				Range = 200,
 				HasConcentration = true
@@ -50,7 +50,10 @@
 
 			string spellName = args[0];
 			// Use the spell checker to determine if the user can cast the spell.
-			SpellChecker spellChecker = new SpellChecker(spells);
+            ISpellRepository repo = new InMemorySpellRepository(spells);
+            
+			SpellChecker spellChecker = new SpellChecker(repo);
+            
 			bool canCast = spellChecker.CanUserCastSpell(user, spellName);
 
 			// Output the result.
