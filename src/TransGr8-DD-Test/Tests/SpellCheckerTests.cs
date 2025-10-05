@@ -10,7 +10,8 @@ namespace TransGr8_DD_Test.Tests
 
 		private List<Spell> spells;
 		private User user;
-        private ISpellRepository spellRepository;
+        private SpellRepository spellRepository;
+        private IReadOnlyList<ISpellRule> spellRules;
 
 		[SetUp]
 		public void Setup()
@@ -82,6 +83,18 @@ namespace TransGr8_DD_Test.Tests
 			};
 
             spellRepository = new InMemorySpellRepository(spells);
+            
+            var rules = new ISpellRule[]
+            {
+                new LevelRule(),
+                new VerbalRule(),
+                new SomaticRule(),
+                new MaterialRule(),
+                new RangeRule(),
+                new ConcentrationRule()
+            };
+            
+            spellRules = rules.ToList();
 
 			// Create a new User object with default values for testing.
 			user = new User
@@ -99,7 +112,7 @@ namespace TransGr8_DD_Test.Tests
 		public void TestCanUserCastSpellReturnsTrue()
 		{
 			// Arrange
-			SpellChecker spellChecker = new SpellChecker(spellRepository);
+			SpellChecker spellChecker = new SpellChecker(spellRepository, spellRules);
 			string spellName = "Fireball";
 
 			// Act
@@ -113,7 +126,7 @@ namespace TransGr8_DD_Test.Tests
 		public void TestCanUserCastSpellReturnsFalseForInsufficientLevel()
 		{
 			// Arrange
-			SpellChecker spellChecker = new SpellChecker(spellRepository);
+			SpellChecker spellChecker = new SpellChecker(spellRepository, spellRules);
 			string spellName = "Fireball";
 			user.Level = 2;
 
@@ -128,7 +141,7 @@ namespace TransGr8_DD_Test.Tests
 		public void TestCanUserCastSpellReturnsFalseForMissingVerbalComponent()
 		{
 			// Arrange
-			SpellChecker spellChecker = new SpellChecker(spellRepository);
+			SpellChecker spellChecker = new SpellChecker(spellRepository, spellRules);
 			string spellName = "Command";
 			user.HasVerbalComponent = false;
 
@@ -143,7 +156,7 @@ namespace TransGr8_DD_Test.Tests
 		public void TestCanUserCastSpellReturnsFalseForMissingSomaticComponent()
 		{
 			// Arrange
-			SpellChecker spellChecker = new SpellChecker(spellRepository);
+			SpellChecker spellChecker = new SpellChecker(spellRepository, spellRules);
 			string spellName = "Cure Wounds";
 			user.HasSomaticComponent = false;
 
@@ -158,7 +171,7 @@ namespace TransGr8_DD_Test.Tests
 		public void TestCanUserCastSpellReturnsFalseForMissingMaterialComponent()
 		{
 			// Arrange
-			SpellChecker spellChecker = new SpellChecker(spellRepository);
+			SpellChecker spellChecker = new SpellChecker(spellRepository, spellRules);
 			string spellName = "Identify";
 			user.HasMaterialComponent = false;
 
@@ -173,7 +186,7 @@ namespace TransGr8_DD_Test.Tests
 		public void TestCanUserCastSpellReturnsFalseForInsufficientRange()
 		{
 			// Arrange
-			SpellChecker spellChecker = new SpellChecker(spellRepository);
+			SpellChecker spellChecker = new SpellChecker(spellRepository, spellRules);
 			string spellName = "Fireball";
 			user.Range = 20;
 
@@ -188,7 +201,7 @@ namespace TransGr8_DD_Test.Tests
 		public void TestCanUserCastSpellReturnsFalseForMissingConcentration()
 		{
 			// Arrange
-			SpellChecker spellChecker = new SpellChecker(spellRepository);
+			SpellChecker spellChecker = new SpellChecker(spellRepository, spellRules);
 			string spellName = "Hold Person";
 			user.HasConcentration = false;
 

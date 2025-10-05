@@ -1,6 +1,11 @@
 namespace TransGr8_DD_Test
 {
-    public class InMemorySpellRepository : ISpellRepository
+    public interface SpellRepository
+    {
+        public Spell FindByName(string name);
+    }
+    
+    public class InMemorySpellRepository : SpellRepository
     {
         private readonly List<Spell> _spells;
 

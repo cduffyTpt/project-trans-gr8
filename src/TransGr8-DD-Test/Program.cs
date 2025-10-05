@@ -47,12 +47,22 @@
 				Range = 200,
 				HasConcentration = true
 			};
+            
+            var rules = new ISpellRule[]
+            {
+                new LevelRule(),
+                new VerbalRule(),
+                new SomaticRule(),
+                new MaterialRule(),
+                new RangeRule(),
+                new ConcentrationRule()
+            };
 
 			string spellName = args[0];
 			// Use the spell checker to determine if the user can cast the spell.
-            ISpellRepository repo = new InMemorySpellRepository(spells);
+            SpellRepository repo = new InMemorySpellRepository(spells);
             
-			SpellChecker spellChecker = new SpellChecker(repo);
+			SpellChecker spellChecker = new SpellChecker(repo, rules);
             
 			bool canCast = spellChecker.CanUserCastSpell(user, spellName);
 
