@@ -2,17 +2,17 @@
 {
 	public class SpellChecker
 	{
-        private readonly SpellRepository _spellRepository;
+        private readonly ISpellRepository _spellRepository;
         private readonly IReadOnlyList<ISpellRule> _rules;
-        public SpellChecker(SpellRepository spellRepository, IEnumerable<ISpellRule> rules)
+        public SpellChecker(ISpellRepository spellRepository, IEnumerable<ISpellRule> rules)
         {
             _spellRepository = spellRepository;
             _rules = rules.ToList();
         }
 
-		public bool CanUserCastSpell(User user, string spellName)
+		public async Task<bool> CanUserCastSpell(User user, string spellName)
 		{
-			Spell spell = _spellRepository.FindByName(spellName);
+			Spell spell = await _spellRepository.FindByNameAsync(spellName);
 
             foreach (var rule in _rules)
             {

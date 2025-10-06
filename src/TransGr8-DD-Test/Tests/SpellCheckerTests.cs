@@ -5,81 +5,16 @@ namespace TransGr8_DD_Test.Tests
 	[TestFixture]
 	public class SpellCheckerTests
 	{
-		private List<Spell> spells;
+		private IReadOnlyList<Spell> spells;
 		private User user;
-        private SpellRepository spellRepository;
+        private ISpellRepository spellRepository;
         private IReadOnlyList<ISpellRule> spellRules;
 
 		[SetUp]
 		public async Task Setup()
 		{
-
-			spells = new List<Spell>
-			{
-				new Spell
-				{
-					Name = "Fireball",
-					Level = 3,
-					CastingTime = "1 action",
-					Components = "V, S, M (a tiny ball of bat guano and sulfur)",
-					Range = 150,
-					Duration = "Instantaneous",
-					SavingThrow = "Dexterity"
-				},
-				new Spell
-				{
-					Name = "Magic Missile",
-					Level = 1,
-					CastingTime = "1 action",
-					Components = "V, S",
-					Range = 120,
-					Duration = "Instantaneous",
-					SavingThrow = ""
-				},
-				new Spell
-				{
-					Name = "Cure Wounds",
-					Level = 1,
-					CastingTime = "1 action",
-					Components = "V, M",
-					Range = 1,
-					Duration = "Instantaneous",
-					SavingThrow = ""
-				},
-				new Spell
-				{
-					Name = "Command",
-					Level = 1,
-					CastingTime = "1 action",
-					Components = "V, S",
-					Range = 1,
-					Duration = "Instantaneous",
-					SavingThrow = ""
-				},
-				new Spell
-				{
-					Name = "Identify",
-					Level = 1,
-					CastingTime = "1 action",
-					Components = "V, S, M",
-					Range = 1,
-					Duration = "Instantaneous",
-					SavingThrow = ""
-				},
-				new Spell
-				{
-					Name = "Hold Person",
-					Level = 1,
-					CastingTime = "1 action",
-					Components = "V, S, M",
-					Range = 1,
-					Duration = "Instantaneous",
-					SavingThrow = ""
-				}
-
-			};
-
-            spellRepository = new InMemorySpellRepository(spells);
+            spellRepository = new JsonSpellRepository(Path.Join(Directory.GetCurrentDirectory(), "../../../test_spells.json"));
+            spells = await spellRepository.GetAllAsync();
             
             var rules = new ISpellRule[]
             {
@@ -93,7 +28,7 @@ namespace TransGr8_DD_Test.Tests
             
             spellRules = rules.ToList();
 
-            var source = new FileUserSource("userData.json");
+            var source = new FileUserSource(Path.Join(Directory.GetCurrentDirectory(), "../../../userData.json"));
             var deserializer = new JsonUserDeserializer();
             var factory = new UserFactory();
             var userRepo = new UserRepository(source, deserializer, factory);
@@ -102,21 +37,23 @@ namespace TransGr8_DD_Test.Tests
 		}
 
 		[Test]
-		public void TestCanUserCastSpellReturnsTrue()
+		public async Task TestCanUserCastSpellReturnsTrue()
 		{
 			// Arrange
 			SpellChecker spellChecker = new SpellChecker(spellRepository, spellRules);
 			string spellName = "Fireball";
 
+            user.HasSomaticComponent = true;
+
 			// Act
-			bool result = spellChecker.CanUserCastSpell(user, spellName);
+			bool result = await spellChecker.CanUserCastSpell(user, spellName);
 
 			// Assert
 			Assert.True(result);
 		}
 
 		[Test]
-		public void TestCanUserCastSpellReturnsFalseForInsufficientLevel()
+		public async Task TestCanUserCastSpellReturnsFalseForInsufficientLevel()
 		{
 			// Arrange
 			SpellChecker spellChecker = new SpellChecker(spellRepository, spellRules);
@@ -124,14 +61,14 @@ namespace TransGr8_DD_Test.Tests
 			user.Level = 2;
 
 			// Act
-			bool result = spellChecker.CanUserCastSpell(user, spellName);
+			bool result = await spellChecker.CanUserCastSpell(user, spellName);
 
 			// Assert
 			Assert.False(result);
 		}
 
 		[Test]
-		public void TestCanUserCastSpellReturnsFalseForMissingVerbalComponent()
+		public async Task TestCanUserCastSpellReturnsFalseForMissingVerbalComponent()
 		{
 			// Arrange
 			SpellChecker spellChecker = new SpellChecker(spellRepository, spellRules);
@@ -139,14 +76,14 @@ namespace TransGr8_DD_Test.Tests
 			user.HasVerbalComponent = false;
 
 			// Act
-			bool result = spellChecker.CanUserCastSpell(user, spellName);
+			bool result = await spellChecker.CanUserCastSpell(user, spellName);
 
 			// Assert
 			Assert.False(result);
 		}
 
 		[Test]
-		public void TestCanUserCastSpellReturnsFalseForMissingSomaticComponent()
+		public async Task TestCanUserCastSpellReturnsFalseForMissingSomaticComponent()
 		{
 			// Arrange
 			SpellChecker spellChecker = new SpellChecker(spellRepository, spellRules);
@@ -154,14 +91,14 @@ namespace TransGr8_DD_Test.Tests
 			user.HasSomaticComponent = false;
 
 			// Act
-			bool result = spellChecker.CanUserCastSpell(user, spellName);
+			bool result = await spellChecker.CanUserCastSpell(user, spellName);
 
 			// Assert
 			Assert.False(result);
 		}
 
 		[Test]
-		public void TestCanUserCastSpellReturnsFalseForMissingMaterialComponent()
+		public async Task TestCanUserCastSpellReturnsFalseForMissingMaterialComponent()
 		{
 			// Arrange
 			SpellChecker spellChecker = new SpellChecker(spellRepository, spellRules);
@@ -169,14 +106,14 @@ namespace TransGr8_DD_Test.Tests
 			user.HasMaterialComponent = false;
 
 			// Act
-			bool result = spellChecker.CanUserCastSpell(user, spellName);
+			bool result = await spellChecker.CanUserCastSpell(user, spellName);
 
 			// Assert
 			Assert.False(result);
 		}
 
 		[Test]
-		public void TestCanUserCastSpellReturnsFalseForInsufficientRange()
+		public async Task TestCanUserCastSpellReturnsFalseForInsufficientRange()
 		{
 			// Arrange
 			SpellChecker spellChecker = new SpellChecker(spellRepository, spellRules);
@@ -184,14 +121,14 @@ namespace TransGr8_DD_Test.Tests
 			user.Range = 20;
 
 			// Act
-			bool result = spellChecker.CanUserCastSpell(user, spellName);
+			bool result = await spellChecker.CanUserCastSpell(user, spellName);
 
 			// Assert
 			Assert.False(result);
 		}
 
 		[Test]
-		public void TestCanUserCastSpellReturnsFalseForMissingConcentration()
+		public async Task TestCanUserCastSpellReturnsFalseForMissingConcentration()
 		{
 			// Arrange
 			SpellChecker spellChecker = new SpellChecker(spellRepository, spellRules);
@@ -199,7 +136,7 @@ namespace TransGr8_DD_Test.Tests
 			user.HasConcentration = false;
 
 			// Act
-			bool result = spellChecker.CanUserCastSpell(user, spellName);
+			bool result = await spellChecker.CanUserCastSpell(user, spellName);
 
 			// Assert
 			Assert.False(result);
