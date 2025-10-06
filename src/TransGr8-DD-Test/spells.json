@@ -1,0 +1,27 @@
+[
+  {
+    "Name": "Fireball",
+    "Level": 3,
+    "CastingTime": "1 action",
+    "Components": "V, S, M (a tiny ball of bat guano and sulfur)",
+    "Range": 150,
+    "Duration": "Instantaneous",
+    "SavingThrow": "Dexterity"
+  },
+  {
+    "Name": "Magic Missile",
+    "Level": 1,
+    "CastingTime": "1 action",
+    "Components": "V, S",
+    "Range": 120,
+    "Duration": "Instantaneous"
+  },
+  {
+    "Name": "Cure Wounds",
+    "Level": 1,
+    "CastingTime": "1 action",
+    "Components": "V, S",
+    "Range": 1,
+    "Duration": "Instantaneous"
+  }
+]
