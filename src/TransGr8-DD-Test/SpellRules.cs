@@ -14,19 +14,19 @@ namespace TransGr8_DD_Test
     public class VerbalRule : ISpellRule
     {
         public bool Validate(User user, Spell spell)
-            => spell.Components.Contains("V") && user.HasVerbalComponent;
+            => !spell.Components.Contains("V") || user.HasVerbalComponent;
     }
 
     public class SomaticRule : ISpellRule
     {
         public bool Validate(User user, Spell spell)
-            => spell.Components.Contains("S") && user.HasSomaticComponent;
+            => !spell.Components.Contains("S") || user.HasSomaticComponent;
     }
 
     public class MaterialRule : ISpellRule
     {
         public bool Validate(User user, Spell spell)
-            => spell.Components.Contains("M") && user.HasMaterialComponent;
+            => !spell.Components.Contains("M") || user.HasMaterialComponent;
     }
 
     public class RangeRule : ISpellRule
@@ -38,7 +38,7 @@ namespace TransGr8_DD_Test
     public class ConcentrationRule : ISpellRule
     {
         public bool Validate(User user, Spell spell)
-            => spell.Duration.Contains("Concentration") && user.HasConcentration;
+            => !spell.Duration.Contains("Concentration") || user.HasConcentration;
     }
     
     // Add additional checks as needed for specific saving throws or other requirements.

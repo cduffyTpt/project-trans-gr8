@@ -2,19 +2,16 @@
 
 namespace TransGr8_DD_Test.Tests
 {
-
 	[TestFixture]
 	public class SpellCheckerTests
 	{
-
-
 		private List<Spell> spells;
 		private User user;
         private SpellRepository spellRepository;
         private IReadOnlyList<ISpellRule> spellRules;
 
 		[SetUp]
-		public void Setup()
+		public async Task Setup()
 		{
 
 			spells = new List<Spell>
@@ -96,16 +93,12 @@ namespace TransGr8_DD_Test.Tests
             
             spellRules = rules.ToList();
 
-			// Create a new User object with default values for testing.
-			user = new User
-			{
-				Level = 3,
-				HasVerbalComponent = true,
-				HasSomaticComponent = true,
-				HasMaterialComponent = true,
-				Range = 200,
-				HasConcentration = true
-			};
+            var source = new FileUserSource("userData.json");
+            var deserializer = new JsonUserDeserializer();
+            var factory = new UserFactory();
+            var userRepo = new UserRepository(source, deserializer, factory);
+            
+            user = await userRepo.LoadAsync();
 		}
 
 		[Test]

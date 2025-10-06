@@ -2,7 +2,7 @@
 {
 	public class Program
 	{
-		static void Main(string[] args)
+		static async Task Main(string[] args)
 		{
 			// Create a user with some attributes.
 			List<Spell> spells = new List<Spell>();
@@ -37,16 +37,14 @@
 				SavingThrow = ""
 			});
 
-			// Create a user with some attributes.
-			User user = new User
-			{
-				Level = 3,
-				HasVerbalComponent = true,
-				HasSomaticComponent = false,
-				HasMaterialComponent = true,
-				Range = 200,
-				HasConcentration = true
-			};
+            var source = new FileUserSource("userData.json");
+            var deserializer = new JsonUserDeserializer();
+            var factory = new UserFactory();
+            var userRepo = new UserRepository(source, deserializer, factory);
+
+            User user = await userRepo.LoadAsync();
+
+            Console.WriteLine(user.ToString());
             
             var rules = new ISpellRule[]
             {
