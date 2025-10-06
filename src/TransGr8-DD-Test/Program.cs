@@ -3,39 +3,12 @@
 	public class Program
 	{
 		static async Task Main(string[] args)
-		{
-			// Create a user with some attributes.
-			List<Spell> spells = new List<Spell>();
-			spells.Add(new Spell
-			{
-				Name = "Fireball",
-				Level = 3,
-				CastingTime = "1 action",
-				Components = "V, S, M (a tiny ball of bat guano and sulfur)",
-				Range = 150,
-				Duration = "Instantaneous",
-				SavingThrow = "Dexterity"
-			});
-			spells.Add(new Spell
-			{
-				Name = "Magic Missile",
-				Level = 1,
-				CastingTime = "1 action",
-				Components = "V, S",
-				Range = 120,
-				Duration = "Instantaneous",
-				SavingThrow = ""
-			});
-			spells.Add(new Spell
-			{
-				Name = "Cure Wounds",
-				Level = 1,
-				CastingTime = "1 action",
-				Components = "V, S",
-				Range = 1,
-				Duration = "Instantaneous",
-				SavingThrow = ""
-			});
+        {
+            ISpellRepository spellRepository = new JsonSpellRepository("spells.json");
+            
+            JsonSpellRepository.SpellService spellService = new JsonSpellRepository.SpellService(spellRepository);
+            IEnumerable<Spell> spells = await spellService.GetAllAsync(CancellationToken.None);
+
 
             var source = new FileUserSource("userData.json");
             var deserializer = new JsonUserDeserializer();
@@ -43,8 +16,6 @@
             var userRepo = new UserRepository(source, deserializer, factory);
 
             User user = await userRepo.LoadAsync();
-
-            Console.WriteLine(user.ToString());
             
             var rules = new ISpellRule[]
             {
@@ -58,7 +29,7 @@
 
 			string spellName = args[0];
 			// Use the spell checker to determine if the user can cast the spell.
-            SpellRepository repo = new InMemorySpellRepository(spells);
+            SpellRepository repo = new InMemorySpellRepository(spells.ToList());
             
 			SpellChecker spellChecker = new SpellChecker(repo, rules);
             
